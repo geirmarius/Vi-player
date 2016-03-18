@@ -1,0 +1,221 @@
+vi-player {
+  display: block;
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+
+  --color: white;
+  --accent-color: #e53232;
+
+  color: var(--color, white);
+  fill: var(--color, white);
+}
+
+vi-player:unresolved, vi-player :unresolved {
+  outline: 1px dotted red !important;
+}
+
+vi-player:-webkit-full-screen {
+  height: 100%;
+  width: 100%;
+  /*font-size: 1.5em;*/
+}
+
+vi-player:-webkit-full-screen video {
+  height: 100%;
+}
+
+vi-player video {
+  display: block;
+  width: 100%;
+}
+
+vi-player video:not(:first-child),
+vi-player video[src*=".mp3"] {
+  display: none;
+}
+
+vi-player ::cue {
+  font-family: 'Asap', sans-serif;
+  background: none;
+  color: white;
+  text-shadow: 0 0 1px black, 0 1px 1px rgba(0,0,0,.4), 0 2px 1px rgba(0,0,0,.2);
+  font-size: 1.5em;
+}
+
+vi-controls {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  min-height: 3em;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  transition: transform .15s, opacity .15s, visibility 0s;
+}
+
+vi-controls:nth-of-type(3) {
+  bottom: auto;
+  top: 0;
+}
+
+vi-controls:nth-of-type(n+4) {
+  display: none;
+}
+
+vi-controls:nth-of-type(2) {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  top: 0;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  transition: border-radius .075s, transform .15s, opacity .15s, visibility 0s;
+}
+
+vi-controls:nth-of-type(2) > * {
+  background: rgba(0, 0, 0, .4);
+  padding: .5em;
+  align-self: auto;
+  border-radius: 2px;
+}
+
+vi-player.immersed vi-controls:not(:nth-of-type(2)),
+vi-player[playback-status="playing"] vi-controls:nth-of-type(2) {
+  transition: border-radius .075s, transform .15s, opacity .15s, visibility 0s .15s;
+  opacity: 0;
+  visibility: hidden;
+}
+
+vi-controls:nth-of-type(1)::before {
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 128px;
+  background: -webkit-linear-gradient(bottom,
+    rgba(0, 0, 0, .8) 0%,
+    rgba(0, 0, 0, .4) 25%,
+    rgba(0, 0, 0, .2) 50%,
+    rgba(0, 0, 0, .1) 75%,
+    transparent 100%
+  );
+}
+
+vi-controls:nth-of-type(3)::before {
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 128px;
+  background: -webkit-linear-gradient(top,
+    rgba(0, 0, 0, .8) 0%,
+    rgba(0, 0, 0, .4) 25%,
+    rgba(0, 0, 0, .2) 50%,
+    rgba(0, 0, 0, .1) 75%,
+    transparent 100%
+  );
+}
+
+vi-view {
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+}
+
+@keyframes waiting {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+
+vi-view[of="playback-status"] {
+  transition: transform .15s, border-radius .15s;
+}
+
+vi-player[playback-status="playing"] vi-view[of="playback-status"] {
+  transform: scale(1.5);
+}
+
+vi-player[playback-status="waiting"] vi-view[of="playback-status"] {
+  animation: waiting 1s linear infinite;
+  border-radius: 50%;
+}
+
+vi-slider {
+  display: block;
+  background: rgba(255, 255, 255, .2);
+  flex: 1 1 auto;
+  height: calc(1em / 8);
+  pointer-events: auto;
+  padding: 1.5em 0;
+  background-clip: content-box;
+  cursor: pointer;
+}
+
+vi-slider vi-slider-handle {
+  position: relative;
+  display: block;
+  height: 100%;
+  max-width: 100%;
+  background: var(--accent-color, #e53232);
+}
+
+vi-slider:not(:active) vi-slider-handle {
+  /*transition: width .15s;*/
+}
+
+vi-slider vi-slider-handle::before,
+vi-slider vi-slider-handle::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  border-radius: 50%;
+  height: calc(1em / 8);
+  width: calc(1em / 8);
+  transform: translate(50%, -50%);
+}
+
+vi-slider vi-slider-handle::before {
+  background: rgba(255, 255, 255, .2);
+  width: 1em;
+  height: 1em;
+}
+
+vi-slider vi-slider-handle::after {
+  background: var(--color, white);
+  height: calc(1em / 4);
+  width: calc(1em / 4);
+}
+
+vi-slider[track="volume"] {
+  width: 64px;
+  flex-grow: 0;
+}
+
+vi-button {
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+  padding: 1em;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+vi-controls > :first-child:not(vi-button),
+vi-controls > :not(vi-button) + :not(vi-button) {
+  margin-left: 1em;
+}
+
+vi-controls > :last-child:not(vi-button) {
+  margin-right: 1em;
+}

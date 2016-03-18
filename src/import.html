@@ -1,0 +1,61 @@
+<!-- Link CSS -->
+<link rel="stylesheet" href="vi.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap">
+
+<!-- Initialize namespace and component creation code -->
+<script src="vi.js"></script>
+
+<!-- Load components -->
+<script src="components/vi-player.js"></script>
+<script src="components/vi-button.js"></script>
+<script src="components/vi-slider.js"></script>
+<script src="components/vi-view.js"></script>
+<script src="components/vi-playback-status.js"></script>
+
+<!-- Iconset definition -->
+<svg width="1em" height="1em" viewBox="0 0 16 16">
+  <defs>
+    <mask id="error-mask">
+      <rect fill="white" x="0" y="0" width="16" height="16"/>
+      <rect fill="black" x="7" y="3" width="2" height="6" />
+      <circle fill="black" cx="8" cy="12" r="1" />
+    </mask>
+
+    <g id="not-found">
+      <circle cx="8" cy="8" r="8" mask="url(#error-mask)" />
+    </g>
+
+    <g id="play">
+      <path d="M 3,2 L 13,8 L 3,14 Z" />
+    </g>
+
+    <g id="pause">
+      <path d="M 2,2 L 6,2 L 6,14 L 2,14 Z" />   
+      <path d="M 10,2 L 14,2 L 14,14 L 10,14 Z" />
+    </g>
+    
+    <g id="wait">
+      <path d="M 8,0 L 6,8 C 6.2,10.67 9.8,10.67 10,8 Z" />
+    </g>
+
+    <g id="next">
+      <path d="M 2,2 L 12,8 L 2,14 Z" />
+      <rect x="12" y="2" width="2" height="12"/>
+    </g>
+
+    <g id="go-first">
+      <path d="M 3,9 L 8,1 L 13,9 Z" />
+      <path d="M 9,9 L 7,9 L 7,15 L 13,15 L 13,13 L 9,13 Z"></path>
+    </g>
+
+    <g id="teather">
+      <rect x="0" y="4" width="12" height="8" />
+      <rect x="14" y="2" width="2" height="12" />
+    </g>
+
+    <g id="fullscreen">
+      <rect x="0" y="2" width="16" height="12" />
+    </g>
+  </defs>
+  <use href="#not-found"></use>
+</svg>
