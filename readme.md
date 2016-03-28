@@ -1,5 +1,5 @@
 # Vi player
-Vi player, or simple Vi, is a html5 based video player with an aim of creating an all purpose video player through customization. Everything is updated real time and should be handled as drag-and-drop ready.
+Vi player, or simply Vi, is a html5 based video player with an aim of creating an all purpose video player through customization. Everything is updated real time and should be handled as drag-and-drop ready.
 
 ## Example
 ```html
