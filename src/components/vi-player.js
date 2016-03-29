@@ -35,7 +35,6 @@ vi.component('vi-player', {
       const last = this.playlist.list.length - 1;
       const next = (i !== undefined) ? i : (current >= last) ? 0 : current + 1;
       
-      this.style.height = `${this.media.offsetHeight}px`;
       this.media.src = this.playlist.list[next].src;
       this.media.play().catch((err) => {
         // Do something
@@ -119,12 +118,6 @@ vi.component('vi-player', {
     this.addEventListener('loadedmetadata', (e) => {
       e.target.volume = 0;
       e.target.volume = localStorage.getItem('vi.volume') || 1;
-      
-      this.animate([
-        {height: `${this.offsetHeight}px`},
-        {height: `${this.media.offsetHeight}px`},
-      ], 150);
-      this.style.height = '';
     }, true);
 
     let immerse;
