@@ -81,7 +81,7 @@ Consider support no-script users by adding a `<noscript>` tag in vi-player.
     </noscript>
 
     <vi-controls>
-        <!-- this is hidden when controls are enabled on the video / audio tag --->
+        <!-- this is hidden when controls are enabled on the video / audio tag -->
     </vi-controls>
 </vi-player>
 ```
