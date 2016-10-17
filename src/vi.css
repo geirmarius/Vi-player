@@ -1,33 +1,52 @@
+@import 'https://fonts.googleapis.com/css?family=Asap:400,400italic,700,700italic';
+
 vi-player {
   display: block;
   position: relative;
-  background: transparent;
-  overflow: hidden;
+
+  line-height: 1.5;
 
   --color: white;
   --accent-color: #e53232;
 
+  background: var(--backdrop, transparent);
   color: var(--color, white);
-  fill: var(--color, white);
+  fill: currentColor;
 }
 
-vi-player:unresolved, vi-player :unresolved {
-  outline: 1px dotted red !important;
+vi-player[immersed] {
+  cursor: none;
+}
+
+vi-player.no-ui *:not(video) {
+  display: none;
 }
 
 vi-player:-webkit-full-screen {
-  height: 100%;
   width: 100%;
-  /*font-size: 1.5em;*/
+  height: 100%;
+  min-width: initial;
+  min-height: initial;
+  max-width: initial;
+  max-height: initial;
 }
 
-vi-player:-webkit-full-screen video {
-  height: 100%;
+@media (min-width: 1000px) {
+  vi-player:-webkit-full-screen {
+    font-size: 1.25em;
+  }
+}
+
+@media (min-width: 1600px) {
+  vi-player:-webkit-full-screen {
+    font-size: 1.5em;
+  }
 }
 
 vi-player video {
   display: block;
   width: 100%;
+  height: 100%;
 }
 
 vi-player video:not(:first-child),
@@ -39,58 +58,78 @@ vi-player ::cue {
   font-family: 'Asap', sans-serif;
   background: none;
   color: white;
-  text-shadow: 0 0 1px black, 0 1px 1px rgba(0,0,0,.4), 0 2px 1px rgba(0,0,0,.2);
-  font-size: 1.5em;
+  text-shadow:
+    0 0 1px black,
+    0 1px 1px rgba(0, 0, 0, .4),
+    0 2px 1px rgba(0, 0, 0, .2);
 }
+
+vi-player video[controls] ~ vi-controls {
+  display: none;
+}
+
+vi-shadow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+/**
+
+
+
+
+SHOW FULLSCREEN IN PORTRAIT or something
+
+attributes: show: always, fullscreen, paused
+
+
+
+
+*/
+
 
 vi-controls {
   position: absolute;
+  color: var(--color, currentColor);
   z-index: 1;
   left: 0;
   bottom: 0;
   right: 0;
   min-height: 3em;
+  padding: 0 .5em;
   display: flex;
   align-items: center;
   pointer-events: none;
-  transition: transform .15s, opacity .15s, visibility 0s;
+  user-select: none;
+  transition:
+    transform .15s,
+    opacity .15s,
+    visibility 0s;
 }
 
-vi-controls:nth-of-type(3) {
-  bottom: auto;
-  top: 0;
+vi-player audio ~ vi-controls {
+  position: relative;
+  overflow: hidden;
 }
 
-vi-controls:nth-of-type(n+4) {
+vi-player[immersed] video ~ vi-controls {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform .15s,
+    opacity .15s,
+    visibility 0s .15s;
+}
+
+vi-controls:nth-of-type(n+3) {
   display: none;
 }
 
-vi-controls:nth-of-type(2) {
-  position: absolute;
-  z-index: 2;
-  pointer-events: none;
-  top: 0;
-  border-radius: 2px;
-  display: flex;
-  justify-content: center;
-  transition: border-radius .075s, transform .15s, opacity .15s, visibility 0s;
-}
-
-vi-controls:nth-of-type(2) > * {
-  background: rgba(0, 0, 0, .4);
-  padding: .5em;
-  align-self: auto;
-  border-radius: 2px;
-}
-
-vi-player.immersed vi-controls:not(:nth-of-type(2)),
-vi-player[playback-status="playing"] vi-controls:nth-of-type(2) {
-  transition: border-radius .075s, transform .15s, opacity .15s, visibility 0s .15s;
-  opacity: 0;
-  visibility: hidden;
-}
-
-vi-controls:nth-of-type(1)::before {
+vi-player video ~ vi-controls:nth-of-type(1)::before {
   content: '';
   display: block;
   position: absolute;
@@ -108,7 +147,7 @@ vi-controls:nth-of-type(1)::before {
   );
 }
 
-vi-controls:nth-of-type(3)::before {
+vi-player video ~ vi-controls:nth-of-type(2)::before {
   content: '';
   display: block;
   position: absolute;
@@ -126,39 +165,32 @@ vi-controls:nth-of-type(3)::before {
   );
 }
 
+vi-controls > * {
+  margin: 0 .5em;
+  pointer-events: all;
+}
+
 vi-view {
   display: inline-flex;
   align-items: center;
   align-self: stretch;
-}
-
-@keyframes waiting {
-  from {transform: rotate(0deg);}
-  to {transform: rotate(360deg);}
-}
-
-vi-view[of="playback-status"] {
-  transition: transform .15s, border-radius .15s;
-}
-
-vi-player[playback-status="playing"] vi-view[of="playback-status"] {
-  transform: scale(1.5);
-}
-
-vi-player[playback-status="waiting"] vi-view[of="playback-status"] {
-  animation: waiting 1s linear infinite;
-  border-radius: 50%;
+  pointer-events: none;
+  /*
+  font-size: 0.75em;
+  font-weight: bold;
+  */
 }
 
 vi-slider {
+  position: relative;
+  box-sizing: content-box;
   display: block;
-  background: rgba(255, 255, 255, .2);
-  flex: 1 1 auto;
+  background: var(--track-background, rgba(255, 255, 255, .2));
+  flex: auto;
   height: calc(1em / 8);
-  pointer-events: auto;
   padding: 1.5em 0;
   background-clip: content-box;
-  cursor: pointer;
+  cursor: var(--interaction-cursor, auto);
 }
 
 vi-slider vi-slider-handle {
@@ -167,14 +199,12 @@ vi-slider vi-slider-handle {
   height: 100%;
   max-width: 100%;
   background: var(--accent-color, #e53232);
-}
-
-vi-slider:not(:active) vi-slider-handle {
-  /*transition: width .15s;*/
+  transition: font-size .1s;
 }
 
 vi-slider vi-slider-handle::before,
 vi-slider vi-slider-handle::after {
+  z-index: 1;
   content: '';
   position: absolute;
   right: 0;
@@ -186,36 +216,56 @@ vi-slider vi-slider-handle::after {
 }
 
 vi-slider vi-slider-handle::before {
-  background: rgba(255, 255, 255, .2);
+  background: var(--knob-background, rgba(255, 255, 255, .1));
   width: 1em;
   height: 1em;
 }
 
 vi-slider vi-slider-handle::after {
-  background: var(--color, white);
+  background: currentColor;
   height: calc(1em / 4);
   width: calc(1em / 4);
 }
 
-vi-slider[track="volume"] {
-  width: 64px;
+vi-slider:active vi-slider-handle {
+  font-size: 1.5em;
+}
+
+vi-slider[data-viid="volume-knob"] {
+  width: 4em;
   flex-grow: 0;
 }
 
 vi-button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   align-self: stretch;
-  padding: 1em;
-  pointer-events: auto;
-  cursor: pointer;
+  padding: .5em;
+  margin: 0;
+  cursor: var(--interaction-cursor, auto);
 }
 
-vi-controls > :first-child:not(vi-button),
-vi-controls > :not(vi-button) + :not(vi-button) {
-  margin-left: 1em;
+vi-button.big {
+  font-size: 1.5em;
 }
 
-vi-controls > :last-child:not(vi-button) {
-  margin-right: 1em;
+vi-button[disabled] {
+  fill: rgba(255, 255, 255, .4);
+  /*
+    pointer-events: none;
+
+    This would seem like the logical option, but it would
+    result in the video element being clicked.
+  */
+}
+
+vi-button::after {
+  content: '';
+  position: absolute;
+  left: -.5em;
+  right: -.5em;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
 }

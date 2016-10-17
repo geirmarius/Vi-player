@@ -1,60 +1,205 @@
 <!-- Link CSS -->
 <link rel="stylesheet" href="vi.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Asap">
 
-<!-- Initialize namespace and component creation code -->
+<!-- Initialize namespace and module creation code -->
 <script src="vi.js"></script>
+
+<!-- vi-button -->
+<template id="vi-button">
+  <style>
+    button {
+      all: unset;
+      display: block;
+      pointer-events: none;
+    }
+
+    button:focus {
+      outline: 1px dotted currentColor;
+    }
+
+    svg {
+      display: block;
+    }
+  </style>
+</template>
+
+<template id="vi-iconpack" >
+  <svg width="1em" height="1em" viewBox="0 0 16 16">
+    <defs>
+      <mask id="error-mask">
+        <rect fill="white" x="0" y="0" width="16" height="16"/>
+        <rect fill="black" x="7" y="3" width="2" height="6" />
+        <circle fill="black" cx="8" cy="12" r="1" />
+      </mask>
+
+      <g id="not-found">
+        <circle cx="8" cy="8" r="8" mask="url(#error-mask)" />
+      </g>
+
+      <g id="play">
+        <path d="M 3,2 L 13,8 L 3,14 Z" />
+      </g>
+
+      <g id="pause">
+        <path d="M 2,2 L 6,2 L 6,14 L 2,14 Z" />
+        <path d="M 10,2 L 14,2 L 14,14 L 10,14 Z" />
+      </g>
+
+      <g id="wait">
+        <path d="M 8,0 L 6,8 C 6.2,10.67 9.8,10.67 10,8 Z" />
+      </g>
+
+      <g id="prev">
+        <rect x="2" y="2" width="2" height="12"/>
+        <path d="M 14,2 L 4,8 L 14,14 Z" />
+      </g>
+
+      <g id="next">
+        <path d="M 2,2 L 12,8 L 2,14 Z" />
+        <rect x="12" y="2" width="2" height="12"/>
+      </g>
+
+      <g id="go-first">
+        <path d="M 3,9 L 8,1 L 13,9 Z" />
+        <path d="M 9,9 L 7,9 L 7,15 L 13,15 L 13,13 L 9,13 Z"></path>
+      </g>
+
+      <g id="mute">
+        <polygon points="13,0 8,0 8,13 10,13 10,2 13,2" />
+        <circle cx="7" cy="13" r="3" />
+      </g>
+
+      <g id="unmute">
+        <polygon points="13,0 8,0 8,6 10,8 10,2 13,2" />
+        <polygon points="3,3 14,14 13,15 2,4" />
+        <circle cx="7" cy="13" r="3" />
+      </g>
+
+      <g id="theater">
+        <rect x="0" y="4" width="12" height="8" />
+        <rect x="14" y="2" width="2" height="12" />
+      </g>
+
+      <g id="fullscreen">
+        <polygon points="8,2 14,2 14,8 12,8 12,4 8,4" />
+        <polygon points="2,8 4,8 4,12 8,12 8,14 2,14" />
+      </g>
+    </defs>
+    <use href="#not-found"></use>
+  </svg>
+</template>
+
+<!-- Shadow template -->
+<template id="shadow">
+  <style>
+    :host > * {
+      box-sizing: border-box;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      padding: 1em;
+    }
+
+    :host > :not(.\:active) {
+      display: none;
+    }
+
+    .dialog {
+      background: rgba(0, 0, 0, .8);
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      background: rgba(255, 255, 255, .05);
+      padding: .5em 1em;
+      border: none;
+      border-radius: 2px;
+    }
+
+    #playback-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @keyframes waiting {
+      to { transform: rotate(360deg) }
+    }
+
+    #playback-icon svg {
+      padding: .5em;
+      background: rgba(0, 0, 0, .8);
+      border-radius: 2px;
+      fill: white;
+      width: 1em;
+      height: 1em;
+      transition:
+        height .1s,
+        width .1s,
+        opacity .1s;
+    }
+
+    #playback-icon.playing svg {
+      width: 2em;
+      height: 2em;
+      opacity: 0;
+      transition:
+        height .3s,
+        width .3s,
+        opacity .3s;
+    }
+
+    #playback-icon.waiting svg {
+      border-radius: 50%;
+      animation: waiting 1s linear infinite;
+    }
+  </style>
+
+  <div id="playback-icon" class=":active">
+    <svg viewBox="0 0 16 16">
+      <defs>
+        <g id="play">
+          <path d="M 3,2 L 13,8 L 3,14 Z" />
+        </g>
+
+        <g id="pause">
+          <path d="M 2,2 L 6,2 L 6,14 L 2,14 Z" />
+          <path d="M 10,2 L 14,2 L 14,14 L 10,14 Z" />
+        </g>
+
+        <g id="wait">
+          <path d="M 8,0 L 6,8 C 6.2,10.67 9.8,10.67 10,8 Z" />
+        </g>
+      </defs>
+      <use href="#pause"></use>
+    </svg>
+  </div>
+
+  <article id="tutorial" class="dialog">
+    <h2>WHILE IN FULLSCREEN</h2>
+    <ul>
+      <li>
+        Swipe up to show controls
+      </li>
+      <li>
+        Tap to play / pause
+      </li>
+      <li>
+        Double tap to toggle fullscreen
+      </li>
+      <li>
+        Swipe down to hide controls
+      </li>
+    </ul>
+    <button>Got it</button>
+  </article>
+</template>
 
 <!-- Load components -->
 <script src="components/vi-player.js"></script>
+<script src="components/vi-controls.js"></script>
 <script src="components/vi-button.js"></script>
 <script src="components/vi-slider.js"></script>
-<script src="components/vi-view.js"></script>
-
-<!-- Iconset definition -->
-<svg width="1em" height="1em" viewBox="0 0 16 16">
-  <defs>
-    <mask id="error-mask">
-      <rect fill="white" x="0" y="0" width="16" height="16"/>
-      <rect fill="black" x="7" y="3" width="2" height="6" />
-      <circle fill="black" cx="8" cy="12" r="1" />
-    </mask>
-
-    <g id="not-found">
-      <circle cx="8" cy="8" r="8" mask="url(#error-mask)" />
-    </g>
-
-    <g id="play">
-      <path d="M 3,2 L 13,8 L 3,14 Z" />
-    </g>
-
-    <g id="pause">
-      <path d="M 2,2 L 6,2 L 6,14 L 2,14 Z" />   
-      <path d="M 10,2 L 14,2 L 14,14 L 10,14 Z" />
-    </g>
-    
-    <g id="wait">
-      <path d="M 8,0 L 6,8 C 6.2,10.67 9.8,10.67 10,8 Z" />
-    </g>
-
-    <g id="next">
-      <path d="M 2,2 L 12,8 L 2,14 Z" />
-      <rect x="12" y="2" width="2" height="12"/>
-    </g>
-
-    <g id="go-first">
-      <path d="M 3,9 L 8,1 L 13,9 Z" />
-      <path d="M 9,9 L 7,9 L 7,15 L 13,15 L 13,13 L 9,13 Z"></path>
-    </g>
-
-    <g id="teather">
-      <rect x="0" y="4" width="12" height="8" />
-      <rect x="14" y="2" width="2" height="12" />
-    </g>
-
-    <g id="fullscreen">
-      <rect x="0" y="2" width="16" height="12" />
-    </g>
-  </defs>
-  <use href="#not-found"></use>
-</svg>
